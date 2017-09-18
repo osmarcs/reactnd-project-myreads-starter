@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Link from './../../components/Link';
 
 class HomeScene extends Component{
   render() {
@@ -159,7 +160,7 @@ class HomeScene extends Component{
           </div>
         </div>
         <div className="open-search">
-          <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+          <Link to='/search'>Add a book</Link>
         </div>
       </div>
       )
