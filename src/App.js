@@ -19,10 +19,11 @@ class BooksApp extends React.Component {
   }
 
   render() {
+    const {shelfs, myBooks} = this.state;
     return (
       <div className='app'>
         <Route exact path='/' render={() => (
-          <HomeScene books={this.state.books} />
+          <HomeScene shelfs={shelfs} books={myBooks} />
         )} />
         <Route path='/search' component={SearchScene} />
       </div>
