@@ -42,3 +42,10 @@ export const search = (query, maxResults) =>
     body: JSON.stringify({ query, maxResults })
   }).then(res => res.json())
     .then(data => data.books)
+
+export const shelfs = {
+  currentlyReading: 'Currently Reading',
+  wantToRead: 'Want to Read',
+  read: 'Read',
+  none: 'None'
+}
