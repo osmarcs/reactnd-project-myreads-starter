@@ -9,12 +9,10 @@ import ButtonShelfChanger from './../../components/buttons/ButtonShelfChanger';
 class HomeScene extends Component{
   static propTypes = {
     shelfs: PropTypes.object.isRequired,
-    books: PropTypes.array.isRequired
+    books: PropTypes.array.isRequired,
   }
-    
-  
   render() {
-    const {shelfs, books} = this.props;
+    const {shelfs, books, moveBook} = this.props;
 
     const shelfKeys = Object.keys(shelfs).filter(shelf => shelf.toLowerCase() !== 'none'); 
 
@@ -27,11 +25,18 @@ class HomeScene extends Component{
           <div>
             {shelfKeys.map(shelfKey => (
               <Bookshelf key={shelfKey} name={shelfs[shelfKey]}>
-                {books.filter(book => book.shelf === shelfKey).map(book => (
-                  <Book key={book.id} book={book}>
-                    <ButtonShelfChanger shelfs={shelfs} current={shelfKey} />
-                  </Book>
-                ))}
+                {books
+                  .filter(book => book.shelf === shelfKey)
+                  .map(book => (
+                    <Book key={book.id} book={book}>
+                      <ButtonShelfChanger
+                        onChangeHandler={(e) => moveBook.bind(this, book)(e)}
+                        shelfs={shelfs}
+                        current={shelfKey}
+                      />
+                    </Book>
+                  ))
+                }
               </Bookshelf>
             ))}
           </div>
@@ -42,7 +47,5 @@ class HomeScene extends Component{
       </div>
     )
   }
-}          
-          
-
+}
 export default HomeScene;
