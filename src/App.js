@@ -35,33 +35,45 @@ const updateBooksShelf = (books, myBooks) => {
   })
 };
 
+const removeBook = (myBooks, book) => {
+  return myBooks.filter(myBook => myBook.id != book.id);
+}
+
 class BooksApp extends React.Component {
   state = {
     myBooks: [],
     shelfs: {},
-    searchBooks: []
+    searchBooks: [],
+    searchQuery: '',
+    loading: false,
   }
   constructor(props) {
     super(props);
-    this.searchInput = _.debounce(this.searchInput, 800);
+    this.searchBooks = _.debounce(this.searchBooks.bind(this), 500);
+    this.moveBook = this.moveBook.bind(this);
   }
-  searchInput(target) {
-    const bookSearch = target.value;
-    BooksAPI.search(bookSearch)
-      .then(books => {
-        if (books.error) {
-          books = [];
-        }
-        this.setState((state) => ({
-          searchBooks: updateBooksShelf(books, state.myBooks)
-        }))
-      });
+  searchInput(query) {
+    this.setState({ searchQuery: query, loading: true });
+    this.searchBooks(query);
   }
-  moveBook(type, book, e) {
+  searchBooks(query) {
+    BooksAPI.search(query)
+    .then(books => {
+      if (books.error) {
+        books = [];
+      }
+      this.setState((state) => ({
+        searchBooks: updateBooksShelf(books, state.myBooks),
+        loading: false
+      }))
+    });
+  }
+  moveBook(book, e) {
     const shelf = e.target.value;
+    this.setState({loading: true});
     BooksAPI.update(book, shelf)
       .then((result) => {
-        this.updateBooksState(type, book, shelf);
+        this.updateBooksState(book, shelf);
       })
   }
   componentDidMount() {
@@ -70,18 +82,23 @@ class BooksApp extends React.Component {
       this.setState({ myBooks: books });
     });
   }
-
-  updateBooksState(type, book, shelf) {
+  updateBooksState(book, shelf) {
     this.setState(({ searchBooks, myBooks }) => {
+      if (!book.shelf || book.shelf === 'none') {
+        myBooks = [...myBooks, book];
+      }
+      if (!shelf || shelf === 'none') {
+        myBooks = removeBook(myBooks, book);
+      }
       const bookUpdated = updateShelfOfBook(book, shelf);
       const currUpdateBooks = (books) => (updateBooks(bookUpdated, books));
       return {
         myBooks: currUpdateBooks(myBooks),
-        searchBooks: currUpdateBooks(searchBooks)
+        searchBooks: currUpdateBooks(searchBooks),
+        loading: false
       };
     });
   }
-
   render() {
     const {shelfs, myBooks} = this.state;
     return (
@@ -90,15 +107,16 @@ class BooksApp extends React.Component {
           <HomeScene
             shelfs={shelfs}
             books={myBooks}
-            moveBook={(book, e) => this.moveBook.bind(this,'myBooks')(book, e)}
+            moveBook={this.moveBook}
           />
         )} />
         <Route path='/search' render={() => (
           <SearchScene
             books={this.state.searchBooks}
             shelfs={shelfs}
-            onSearchInput={(e) => this.searchInput(e.target)}
-            moveBook={(book, e) => this.moveBook.bind(this,'search')(book, e)}
+            query={this.state.searchQuery}
+            onSearchInput={(e) => this.searchInput(e)}
+            moveBook={this.moveBook}
           />
         )}
         />
