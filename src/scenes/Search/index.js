@@ -1,20 +1,27 @@
 import React, {Component} from 'react';
 import Book from './../../components/books/Book';
 import ButtonShelfChanger from './../../components/buttons/ButtonShelfChanger';
+import Link from './../../components/Link';
 
 class SearchScene extends Component{
 
   render() {
-    const { onSearchInput, books, shelfs, moveBook} = this.props;
+    const {
+      onSearchInput,
+      books,
+      shelfs,
+      moveBook,
+      query
+    } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
+          <Link className="close-search" to="/">Close</Link>
           <div className="search-books-input-wrapper">
             <input
-              type="text"
+              type="text" defaultValue={query}
               placeholder="Search by title or author"
-              onInput={onSearchInput}
+              onInput={(e) => onSearchInput(e.target.value)}
             />
           </div>
         </div>
