@@ -5,6 +5,7 @@ import _ from 'lodash';
 import HomeScene from './scenes/Home';
 import SearchScene from './scenes/Search';
 import * as BooksAPI from './BooksAPI';
+import Loading from './components/loading/Loading';
 import './App.css';
 
 const updateShelfOfBook = (book, shelf) => {
@@ -53,10 +54,16 @@ class BooksApp extends React.Component {
     this.moveBook = this.moveBook.bind(this);
   }
   searchInput(query) {
-    this.setState({ searchQuery: query, loading: true });
+    this.setState({ searchQuery: query });
     this.searchBooks(query);
   }
   searchBooks(query) {
+    if (!query.length) {
+      this.setState({ searchBooks: []});
+      return;
+    }
+
+    this.setState({ loading: true });
     BooksAPI.search(query)
     .then(books => {
       if (books.error) {
@@ -77,9 +84,9 @@ class BooksApp extends React.Component {
       })
   }
   componentDidMount() {
-    this.setState({ shelfs: BooksAPI.shelfs });
+    this.setState({ shelfs: BooksAPI.shelfs, loading: true });
     BooksAPI.getAll().then(books => {
-      this.setState({ myBooks: books });
+      this.setState({ myBooks: books, loading: false });
     });
   }
   updateBooksState(book, shelf) {
@@ -100,9 +107,10 @@ class BooksApp extends React.Component {
     });
   }
   render() {
-    const {shelfs, myBooks} = this.state;
+    const {shelfs, myBooks, loading} = this.state;
     return (
       <div className='app'>
+        <Loading active={loading} />
         <Route exact path='/' render={() => (
           <HomeScene
             shelfs={shelfs}
