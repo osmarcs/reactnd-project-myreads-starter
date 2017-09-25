@@ -1,0 +1,10 @@
+.book {
+  width: 140px;
+}
+
+.book-top {
+  position: relative;
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+}

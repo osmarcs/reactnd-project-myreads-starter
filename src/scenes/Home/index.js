@@ -4,12 +4,13 @@ import Link from './../../components/Link';
 import Bookshelf from './../../components/books/Bookshelf';
 import Book from './../../components/books/Book';
 import ButtonShelfChanger from './../../components/buttons/ButtonShelfChanger';
-
+import './home.css';
 
 class HomeScene extends Component{
   static propTypes = {
     shelfs: PropTypes.object.isRequired,
     books: PropTypes.array.isRequired,
+    moveBook: PropTypes.func.isRequired
   }
   render() {
     const {shelfs, books, moveBook} = this.props;

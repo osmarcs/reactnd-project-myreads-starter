@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import './BookInfo.css';
 
 const BookInfo = ({ title, authors }) => (
   <div className='book-info'>
@@ -14,4 +16,8 @@ const BookInfo = ({ title, authors }) => (
   </div>
 );
 
+BookInfo.propTypes = {
+  title: PropTypes.string.isRequired,
+  author: PropTypes.arrayOf(PropTypes.string)
+}
 export default BookInfo;

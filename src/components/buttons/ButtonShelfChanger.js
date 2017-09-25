@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import './ButtonShelfChanger.css';
 
 const ButtonShelfChanger = ({ shelfs, current, onChangeHandler }) => (
   <div className="book-shelf-changer">
@@ -15,4 +17,9 @@ const ButtonShelfChanger = ({ shelfs, current, onChangeHandler }) => (
   </div>
 );
 
+ButtonShelfChanger.propTypes = {
+  shelfs: PropTypes.object.isRequired,
+  current: PropTypes.string.isRequired,
+  onChangeHandler: PropTypes.func.isRequired
+}
 export default ButtonShelfChanger;

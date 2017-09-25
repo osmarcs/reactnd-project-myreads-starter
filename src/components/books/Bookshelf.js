@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './Bookshelf.css';
+
 const Bookshelf = (props) => (
   <div className="bookshelf">
     <h2 className="bookshelf-title">{ props.name}</h2>

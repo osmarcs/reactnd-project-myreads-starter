@@ -36,7 +36,7 @@ const updateBooksShelf = (books, myBooks) => {
 };
 
 const removeBook = (myBooks, book) => {
-  return myBooks.filter(myBook => myBook.id != book.id);
+  return myBooks.filter(myBook => myBook.id !== book.id);
 }
 
 class BooksApp extends React.Component {
